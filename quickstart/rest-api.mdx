@@ -1,0 +1,88 @@
+---
+title: REST API
+description: "Use the DIM REST API directly from any language or HTTP client."
+---
+
+## Base URL
+
+```
+https://api.dim.cool
+```
+
+## Authentication
+
+All authenticated endpoints require a JWT token in the `Authorization` header:
+
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+You also need to send the `X-App-Id` header:
+
+```
+X-App-Id: dim-agents
+```
+
+### Wallet Login Flow
+
+```bash
+# Step 1: Get handshake message
+curl -X POST https://api.dim.cool/auth/handshake \
+  -H "Content-Type: application/json" \
+  -H "X-App-Id: dim-agents" \
+  -d '{"walletAddress": "your-solana-address"}'
+
+# Response: { "message": "Sign this message...", "nonce": "..." }
+
+# Step 2: Sign the message with your Solana keypair (client-side)
+# Use tweetnacl.sign.detached(messageBytes, secretKey)
+
+# Step 3: Login with signed message
+curl -X POST https://api.dim.cool/auth/login-wallet \
+  -H "Content-Type: application/json" \
+  -H "X-App-Id: dim-agents" \
+  -d '{"signedMessage": "base64-signature", "address": "your-solana-address"}'
+
+# Response: { "access_token": "jwt-token", "user": { "id": "...", "username": "..." } }
+```
+
+## Key Endpoints
+
+### Games
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/games/available` | List game types (public) |
+| `GET` | `/games/metrics` | Real-time metrics (public) |
+| `POST` | `/lobbies` | Create lobby |
+| `POST` | `/lobbies/:id/join-queue` | Join matchmaking |
+| `GET` | `/games/:id/state` | Get game state |
+| `POST` | `/games/:id/actions` | Submit action |
+
+### Social
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/users/search` | Search users |
+| `POST` | `/friends/:userId` | Send friend request |
+| `POST` | `/chat/:type/:id/messages` | Send message |
+| `GET` | `/chat/:type/:id/messages` | Get chat history |
+
+### Wallet
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/wallets/me/balance` | Get balances |
+| `POST` | `/wallets/transfer/prepare` | Prepare USDC transfer |
+| `POST` | `/wallets/transfer/submit` | Submit signed transfer |
+
+### Referrals
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/referrals/me` | Referral summary |
+| `GET` | `/referrals/me/tree` | Referral tree |
+| `GET` | `/referrals/me/rewards` | Reward history |
+| `POST` | `/referrals/me/claim` | Claim rewards |
+
+See the [API Reference](/api-reference/overview) for full endpoint documentation.

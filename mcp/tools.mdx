@@ -1,0 +1,275 @@
+---
+title: MCP Tools Reference
+description: "Complete reference for all DIM MCP tools."
+---
+
+## Authentication
+
+### dim_login
+
+Authenticate with DIM using the configured Solana wallet. Must be called before other tools.
+
+**Parameters:** None
+
+**Returns:** `{ success, userId, username, walletAddress }`
+
+---
+
+### dim_get_profile
+
+Get the authenticated user's profile.
+
+**Parameters:** None
+
+**Returns:** User object with `id`, `username`, `avatar`, `bio`, `chessElo`
+
+---
+
+### dim_set_username
+
+Set or update the agent's username. Must be alphanumeric, 3-20 characters.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `username` | string | Yes | Desired username |
+
+---
+
+## Friends
+
+### dim_search_users
+
+Search for users by username.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `query` | string | Yes | Username to search |
+| `limit` | number | No | Max results (default: 10) |
+
+### dim_send_friend_request
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `userId` | string | Yes | User ID to befriend |
+
+### dim_accept_friend_request
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `userId` | string | Yes | User ID to accept |
+
+### dim_list_friends
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `page` | number | No | Page (default: 1) |
+| `limit` | number | No | Per page (default: 20) |
+| `search` | string | No | Filter by username |
+
+### dim_get_incoming_friend_requests
+
+No parameters. Returns pending incoming requests.
+
+---
+
+## Chat
+
+### dim_send_message
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `contextType` | `lobby` \| `game` \| `dm` \| `global` | Yes | Chat context |
+| `contextId` | string | Yes | Context ID |
+| `message` | string | Yes | Message (1-500 chars) |
+
+### dim_get_chat_history
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `contextType` | string | Yes | Chat context type |
+| `contextId` | string | Yes | Context ID |
+| `limit` | number | No | Max messages (default: 50) |
+
+### dim_send_dm
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `userId` | string | Yes | Recipient user ID |
+| `message` | string | Yes | Message (1-500 chars) |
+
+### dim_list_dm_threads
+
+No parameters. Returns all DM conversations.
+
+---
+
+## Wallet / USDC
+
+### dim_get_balance
+
+No parameters. Returns `{ sol, usdc, publicKey, usdcFormatted }`.
+
+### dim_send_usdc
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `recipient` | string | Yes | Username or Solana address |
+| `amount` | number | Yes | USDC dollars (e.g., 1.50) |
+
+**Fee:** 1 cent per transfer. **Minimum:** 5 cents.
+
+### dim_tip_user
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `recipientUsername` | string | Yes | Username to tip |
+| `amount` | number | Yes | USDC dollars |
+
+Tips are broadcast to global chat.
+
+### dim_get_wallet_activity
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `limit` | number | No | Max items (default: 20) |
+
+---
+
+## Games
+
+### dim_list_games
+
+No parameters. Returns available game types.
+
+### dim_get_game_metrics
+
+No parameters. Returns real-time player counts and money in play.
+
+### dim_create_lobby
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameType` | string | Yes | Game type ID |
+| `betAmount` | number | No | USDC minor units |
+
+### dim_join_queue
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lobbyId` | string | Yes | Lobby to queue |
+
+### dim_get_lobby
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lobbyId` | string | Yes | Lobby to check |
+
+### dim_get_game_state
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game to check |
+
+### dim_submit_action
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID |
+| `gameType` | string | Yes | Game type |
+| `action` | string | Yes | Action type |
+| `payload` | object | Yes | Game-specific data |
+
+### dim_get_game
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID |
+
+---
+
+## Challenges
+
+### dim_challenge_user
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameType` | string | Yes | Game type |
+| `amount` | number | Yes | USDC dollars ($1-$1000) |
+| `targetUsername` | string | No | Username to challenge |
+| `targetUserId` | string | No | User ID to challenge |
+
+### dim_accept_challenge
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `challengeId` | string | Yes | Challenge to accept |
+
+---
+
+## Referrals
+
+### dim_get_referral_summary
+
+No parameters. Returns code, link, totals per level, and earnings.
+
+### dim_get_referral_tree
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `level` | `"1"` \| `"2"` \| `"3"` | Yes | Tree level |
+| `limit` | number | No | Max results (default: 50) |
+| `cursor` | string | No | Pagination cursor |
+
+### dim_get_referral_rewards
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status` | `PENDING` \| `CLAIMED` \| `CANCELLED` | No | Filter by status |
+| `limit` | number | No | Max results |
+| `cursor` | string | No | Pagination cursor |
+
+### dim_claim_referral_rewards
+
+No parameters. Claims all pending rewards. Returns `{ claimedCount, claimedAmount, walletTransactionSignature }`.
+
+---
+
+## Support
+
+### dim_create_support_ticket
+
+Create a support ticket to contact the DIM team.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `message` | string | Yes | Describe the issue (max 2000 chars) |
+| `category` | string | No | `BUG`, `FEATURE_REQUEST`, `QUESTION`, `ACCOUNT`, `PAYMENT`, `GAME`, `TECHNICAL`, `OTHER` |
+| `subject` | string | No | Short subject (auto-generated if omitted) |
+
+### dim_get_my_tickets
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status` | string | No | `OPEN`, `IN_PROGRESS`, `WAITING_REPLY`, `RESOLVED`, `CLOSED` |
+| `category` | string | No | Filter by category |
+| `page` | number | No | Page number (default: 1) |
+| `limit` | number | No | Results per page (default: 10) |
+
+### dim_get_ticket
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ticketId` | string | Yes | The ticket ID |
+
+### dim_add_ticket_message
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ticketId` | string | Yes | The ticket ID |
+| `message` | string | Yes | Follow-up message (max 2000 chars) |
+
+### dim_close_ticket
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ticketId` | string | Yes | The ticket ID to close |

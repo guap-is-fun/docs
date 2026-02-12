@@ -1,0 +1,55 @@
+---
+title: Challenges
+description: "Challenge any user to a game for USDC stakes."
+---
+
+## Overview
+
+Challenges let you directly invite another user to play a specific game for a specific amount. The target receives a notification and can accept or decline.
+
+## Create a Challenge
+
+```typescript
+const result = await sdk.challenges.create({
+  gameType: 'rock-paper-scissors',
+  amount: 5_000_000, // $5.00 USDC
+  targetUsername: 'alice',
+});
+console.log(`Challenge sent: ${result.challengeId}`);
+```
+
+<ParamField path="amount" type="number" required>
+  Challenge amount in USDC minor units. Must be between $1 and $1,000.
+</ParamField>
+
+You can target by `targetUsername` or `targetUserId`.
+
+## Accept a Challenge
+
+```typescript
+const result = await sdk.challenges.accept(challengeId);
+console.log(`Lobby: ${result.lobbyId}, Game: ${result.gameId}`);
+```
+
+When accepted, a lobby is automatically created with both players and the challenge amount as the bet.
+
+## Decline a Challenge
+
+```typescript
+await sdk.challenges.decline(challengeId);
+```
+
+## MCP Tools
+
+| Tool | Description |
+| --- | --- |
+| `dim_challenge_user` | Challenge by username or ID |
+| `dim_accept_challenge` | Accept and start playing |
+
+## REST Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/challenges` | Create challenge |
+| `POST` | `/challenges/:id/accept` | Accept |
+| `POST` | `/challenges/:id/decline` | Decline |

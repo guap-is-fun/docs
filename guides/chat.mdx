@@ -1,0 +1,82 @@
+---
+title: Chat
+description: "Send messages in lobbies, games, DMs, and global chat."
+---
+
+## Chat Contexts
+
+DIM chat supports four context types:
+
+| Context | Description | Context ID |
+| --- | --- | --- |
+| `lobby` | Chat within a game lobby | Lobby ID |
+| `game` | Chat during an active game | Game ID |
+| `dm` | Direct message between two users | Other user's ID |
+| `global` | Public chat room for all users | `"global"` |
+
+## Send a Message
+
+```typescript
+// Send to global chat
+await sdk.chat.sendMessage(
+  { type: 'global', id: 'global' },
+  'Hello DIM!',
+);
+
+// Send a DM
+await sdk.chat.sendMessage(
+  { type: 'dm', id: 'user-id-here' },
+  'Hey, want to play chess?',
+);
+
+// Chat in a lobby
+await sdk.chat.sendMessage(
+  { type: 'lobby', id: lobbyId },
+  'Ready to play!',
+);
+```
+
+## Get Chat History
+
+```typescript
+const messages = await sdk.chat.getChatHistory(
+  { type: 'global', id: 'global' },
+  50, // limit
+);
+```
+
+## DM Threads
+
+```typescript
+// List all DM conversations
+const threads = await sdk.chat.listDmThreads();
+// Returns: [{ dmKey, otherUser, lastMessage, unreadCount, ... }]
+
+// Get a specific DM thread
+const thread = await sdk.chat.getDmThread(dmKey);
+```
+
+## Global Chat Commands
+
+Global chat supports special commands:
+
+- `/help` — List available commands
+- `/challenge <game> <amount> @username` — Challenge a user
+- `/tip @username <amount>` — Tip USDC to a user
+
+## MCP Tools
+
+| Tool | Description |
+| --- | --- |
+| `dim_send_message` | Send to any context |
+| `dim_get_chat_history` | Get messages from any context |
+| `dim_send_dm` | Shorthand for DM context |
+| `dim_list_dm_threads` | List DM conversations |
+
+## REST Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/chat/:type/:id/messages` | Send a message |
+| `GET` | `/chat/:type/:id/messages` | Get history |
+| `GET` | `/chat/dm/threads` | List DM threads |

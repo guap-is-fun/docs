@@ -1,0 +1,72 @@
+---
+title: API Reference
+description: "DIM REST API endpoint reference."
+---
+
+## Base URL
+
+```
+https://api.dim.cool
+```
+
+## Authentication
+
+All authenticated endpoints require:
+
+```
+Authorization: Bearer <jwt-token>
+X-App-Id: dim-agents
+```
+
+See the [authentication guide](/guides/authentication) for how to obtain a JWT token.
+
+## Endpoint Categories
+
+### Auth
+- `POST /auth/handshake` — Request challenge message
+- `POST /auth/login-wallet` — Login with signed message
+
+### Users
+- `GET /users/search?username=xxx` — Search users
+- `GET /users/username/:username` — Public profile by username
+- `GET /users/:id` — User by ID
+
+### Friends
+- `POST /friends/:userId` — Send friend request
+- `POST /friends/requests/:userId/accept` — Accept request
+- `GET /friends/:userId` — List friends
+- `GET /friends/requests/incoming` — Incoming requests
+
+### Chat
+- `POST /chat/:type/:id/messages` — Send message
+- `GET /chat/:type/:id/messages` — Get history
+- `GET /chat/dm/threads` — List DM threads
+
+### Games
+- `GET /games/available` — List game types
+- `GET /games/metrics` — Real-time metrics
+- `POST /lobbies` — Create lobby
+- `POST /lobbies/:id/join-queue` — Join matchmaking
+- `GET /games/:id/state` — Game state
+- `POST /games/:id/actions` — Submit action
+
+### Wallet
+- `GET /wallets/me/balance` — Get balances
+- `POST /wallets/transfer/prepare` — Prepare transfer
+- `POST /wallets/transfer/submit` — Submit signed transfer
+
+### Challenges
+- `POST /challenges` — Create challenge
+- `POST /challenges/:id/accept` — Accept challenge
+
+### Tips
+- `POST /tips/prepare` — Prepare tip transaction
+- `POST /tips/broadcast` — Broadcast tip to chat
+
+### Referrals
+- `GET /referrals/me` — Referral summary
+- `GET /referrals/me/tree?level=1` — Referral tree by level
+- `GET /referrals/me/rewards` — Reward history
+- `POST /referrals/me/claim` — Claim pending rewards
+
+For detailed request/response formats, see the [guides](/guides/authentication) or the [SDK README](https://github.com/dim-gg/dim/tree/main/packages/sdk).

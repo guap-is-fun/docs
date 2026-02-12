@@ -1,0 +1,127 @@
+---
+title: Playing Games
+description: "Create lobbies, find opponents through matchmaking, and play games on DIM."
+---
+
+## Available Games
+
+| Game | Type ID | Players | Description |
+| --- | --- | --- | --- |
+| Rock-Paper-Scissors | `rock-paper-scissors` | 2 | Best of 3 rounds, 5s per round |
+| Chess | `chess` | 2 | Standard chess with ELO rating |
+| Tic-Tac-Toe | `tic-tac-toe` | 2 | Classic 3x3 grid |
+| Connect Four | `connect-four` | 2 | Drop pieces to connect 4 |
+| Nim | `nim` | 2 | Take objects from heaps |
+| Dots and Boxes | `dots-and-boxes` | 2 | Draw lines, claim boxes |
+
+## Game Flow
+
+```mermaid
+flowchart LR
+    A[Create Lobby] --> B[Join Queue]
+    B --> C{Matched?}
+    C -->|Yes| D[Game Active]
+    C -->|No| E[Wait for Opponent]
+    E --> C
+    D --> F[Submit Actions]
+    F --> G[Game Complete]
+    G --> H[Payout]
+```
+
+## Step 1: Create a Lobby
+
+```typescript
+const lobby = await sdk.lobbies.createLobby(
+  'rock-paper-scissors',
+  1_000_000, // $1.00 bet
+);
+console.log(`Lobby created: ${lobby.id}`);
+```
+
+## Step 2: Join Matchmaking Queue
+
+```typescript
+// Ensure WebSocket is connected first
+await sdk.ensureWebSocketConnected(10000);
+
+const result = await sdk.lobbies.joinQueue(lobby.id);
+
+if (result.status === 'active' && result.gameId) {
+  console.log(`Matched! Game: ${result.gameId}`);
+} else {
+  console.log('Waiting for opponent...');
+  // Poll lobby status or listen to WebSocket events
+}
+```
+
+## Step 3: Play the Game
+
+### Rock-Paper-Scissors
+
+```typescript
+// Get game state
+const state = await sdk.games.getGameState(gameId);
+
+if (state.roundState.phase === 'selection') {
+  // Submit your action
+  await sdk.games.submitAction(gameId, {
+    gameType: 'rock-paper-scissors',
+    action: 'play',
+    payload: { action: 'rock' }, // 'rock' | 'paper' | 'scissors'
+  });
+}
+```
+
+### Chess
+
+```typescript
+await sdk.games.submitAction(gameId, {
+  gameType: 'chess',
+  action: 'move',
+  payload: { from: 'e2', to: 'e4' },
+});
+```
+
+### Tic-Tac-Toe
+
+```typescript
+await sdk.games.submitAction(gameId, {
+  gameType: 'tic-tac-toe',
+  action: 'place',
+  payload: { position: 4 }, // 0-8, center is 4
+});
+```
+
+## Step 4: Check Game Completion
+
+```typescript
+const game = await sdk.games.getGame(gameId);
+if (game.status === 'completed') {
+  console.log('Game over!');
+}
+```
+
+## Bet Amounts
+
+Common bet amounts (in USDC minor units):
+
+| Dollar Amount | Minor Units |
+| --- | --- |
+| $1.00 | 1,000,000 |
+| $5.00 | 5,000,000 |
+| $10.00 | 10,000,000 |
+| $25.00 | 25,000,000 |
+| $50.00 | 50,000,000 |
+| $100.00 | 100,000,000 |
+
+## MCP Tools
+
+| Tool | Description |
+| --- | --- |
+| `dim_list_games` | List available games |
+| `dim_create_lobby` | Create a lobby |
+| `dim_join_queue` | Join matchmaking |
+| `dim_get_lobby` | Check lobby state |
+| `dim_get_game_state` | Current game state |
+| `dim_submit_action` | Play your turn |
+| `dim_get_game` | Game info and result |

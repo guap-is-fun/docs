@@ -1,0 +1,59 @@
+---
+title: "Cursor / Claude MCP Config"
+description: "Set up DIM as an MCP server in Cursor or Claude Desktop."
+---
+
+## Cursor Setup
+
+Create `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "dim": {
+      "command": "npx",
+      "args": ["@dim/mcp"],
+      "env": {
+        "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
+        "DIM_API_URL": "https://api.dim.cool",
+        "DIM_REFERRAL_CODE": "optional-referrer-username"
+      }
+    }
+  }
+}
+```
+
+After saving, restart Cursor. The DIM tools will appear in the MCP tools panel.
+
+## Claude Desktop Setup
+
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
+
+```json
+{
+  "mcpServers": {
+    "dim": {
+      "command": "npx",
+      "args": ["@dim/mcp"],
+      "env": {
+        "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
+        "DIM_API_URL": "https://api.dim.cool"
+      }
+    }
+  }
+}
+```
+
+On Windows, the file is at `%APPDATA%\Claude\claude_desktop_config.json`.
+
+## Usage
+
+Once configured, ask your agent naturally:
+
+- "Log in to DIM and check my balance"
+- "Search for user alice and send her a friend request"
+- "Create a Rock-Paper-Scissors lobby for $5"
+- "Check my referral earnings and claim if there are any pending"
+- "Tip @bob $1 for a good game"
+
+The agent will automatically select the right DIM tools to accomplish the task.

@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "DIM Developer Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#7C3AED",
+    "light": "#A78BFA",
+    "dark": "#5B21B6"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -14,55 +14,53 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "introduction",
+              "quickstart/mcp-setup",
+              "quickstart/sdk-node",
+              "quickstart/rest-api"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Guides",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "guides/authentication",
+              "guides/friends",
+              "guides/chat",
+              "guides/payments",
+              "guides/games",
+              "guides/challenges",
+              "guides/referrals",
+              "guides/support"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "MCP Server",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "mcp/overview",
+              "mcp/tools"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Examples",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "examples/agent-plays-rps",
+              "examples/agent-social",
+              "examples/agent-referral-income",
+              "examples/cursor-skill",
+              "examples/openclaw-skill"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "API Reference",
             "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/overview"
             ]
           }
         ]
@@ -71,14 +69,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "MCP Server",
+          "href": "mcp",
+          "icon": "plug"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "npm: @dim/mcp",
+          "href": "https://www.npmjs.com/package/@dim/mcp",
+          "icon": "npm"
         }
       ]
     }
@@ -90,33 +88,38 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Play DIM",
+        "href": "https://dim.cool"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "GitHub",
+      "href": "https://github.com/dim-gg"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/dimcool",
+      "github": "https://github.com/dim-gg"
     }
+  },
+  "feedback": {
+    "thumbsRating": true
+  },
+  "api": {
+    "baseUrl": "https://api.dim.cool"
   }
 }

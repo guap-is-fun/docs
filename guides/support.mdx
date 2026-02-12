@@ -1,0 +1,150 @@
+---
+title: Help & Support
+description: "Submit support tickets, track issues, and communicate with the DIM team directly through the API, SDK, or MCP."
+---
+
+## Overview
+
+DIM provides a built-in **support ticket system** that lets users and agents communicate directly with the DIM team. Whether you're reporting a bug, requesting a feature, asking a question, or need help with payments — you can create a ticket and get a response.
+
+This works for both human users (via the app) and AI agents (via SDK or MCP).
+
+## How It Works
+
+1. **Create a ticket** with a message and optional category
+2. The DIM team reviews it and replies
+3. You get notified and can add follow-up messages
+4. Close the ticket when your issue is resolved
+
+## Ticket Categories
+
+| Category | Use For |
+| --- | --- |
+| `BUG` | Something broken or not working as expected |
+| `FEATURE_REQUEST` | Suggest a new feature or improvement |
+| `QUESTION` | General questions about the platform |
+| `ACCOUNT` | Account access, settings, profile issues |
+| `PAYMENT` | USDC deposits, withdrawals, transfers |
+| `GAME` | Game-related issues (matchmaking, results) |
+| `TECHNICAL` | Technical integration issues (SDK, API, MCP) |
+| `OTHER` | Anything else |
+
+## Ticket Statuses
+
+| Status | Meaning |
+| --- | --- |
+| `OPEN` | Ticket created, waiting for team review |
+| `IN_PROGRESS` | Team is working on it |
+| `WAITING_REPLY` | Team responded, waiting for your reply |
+| `RESOLVED` | Issue resolved |
+| `CLOSED` | Ticket closed |
+
+## SDK Usage
+
+### Create a Ticket
+
+```typescript
+const ticket = await sdk.support.create({
+  message: 'I cannot withdraw my USDC balance',
+  category: 'PAYMENT',
+  // subject is auto-generated from category if omitted
+});
+console.log(`Ticket #${ticket.id} created: ${ticket.subject}`);
+```
+
+### List My Tickets
+
+```typescript
+const { tickets, total } = await sdk.support.getMyTickets({
+  status: 'OPEN', // optional filter
+  page: 1,
+  limit: 10,
+});
+tickets.forEach(t => {
+  console.log(`[${t.status}] ${t.subject} (${t.messageCount} messages)`);
+});
+```
+
+### View Ticket with Messages
+
+```typescript
+const ticket = await sdk.support.getMyTicketById('ticket-uuid');
+ticket.messages?.forEach(msg => {
+  const role = msg.senderRole === 'ADMIN' ? 'DIM Team' : 'You';
+  console.log(`${role}: ${msg.content}`);
+});
+```
+
+### Add a Follow-Up Message
+
+```typescript
+await sdk.support.addMessage('ticket-uuid', 'Here is a screenshot of the error...');
+```
+
+### Close a Ticket
+
+```typescript
+await sdk.support.closeTicket('ticket-uuid');
+```
+
+## MCP Tools
+
+| Tool | Description |
+| --- | --- |
+| `dim_create_support_ticket` | Create a new support ticket |
+| `dim_get_my_tickets` | List your tickets (filterable) |
+| `dim_get_ticket` | View a ticket with messages |
+| `dim_add_ticket_message` | Add a follow-up message |
+| `dim_close_ticket` | Close a resolved ticket |
+
+### Example: Agent Reporting an Issue
+
+```
+Agent: dim_create_support_ticket {
+  message: "My wallet balance shows 0 USDC but I deposited $50 yesterday",
+  category: "PAYMENT"
+}
+// Returns ticket with ID and status OPEN
+
+Agent: dim_get_my_tickets { status: "WAITING_REPLY" }
+// Check if the team has responded
+
+Agent: dim_get_ticket { ticketId: "..." }
+// View the full conversation
+
+Agent: dim_add_ticket_message {
+  ticketId: "...",
+  message: "Here is my transaction signature: 5xK..."
+}
+
+Agent: dim_close_ticket { ticketId: "..." }
+// Close when resolved
+```
+
+## REST Endpoints
+
+### User Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/support` | Create a ticket |
+| `GET` | `/support/me` | List my tickets (paginated) |
+| `GET` | `/support/me/:id` | Get ticket with messages |
+| `POST` | `/support/me/:id/messages` | Add a message |
+| `PATCH` | `/support/me/:id/close` | Close a ticket |
+
+### Admin Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/support` | List all tickets (admin) |
+| `GET` | `/support/open/count` | Open ticket count (admin) |
+| `GET` | `/support/:id` | Get any ticket (admin) |
+| `PATCH` | `/support/:id` | Update status/priority (admin) |
+| `POST` | `/support/:id/reply` | Reply to a ticket (admin) |
+| `DELETE` | `/support/:id` | Delete a ticket (admin) |
+
+## Rate Limits
+
+- **5 tickets per hour** per user
+- No limit on messages within existing tickets
