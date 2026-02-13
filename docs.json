@@ -70,7 +70,7 @@
       "anchors": [
         {
           "anchor": "MCP Server",
-          "href": "mcp",
+          "href": "/mcp",
           "icon": "plug"
         },
         {
