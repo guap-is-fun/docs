@@ -86,16 +86,11 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Play DIM",
-        "href": "https://dim.cool"
-      }
-    ],
+    "links": [],
     "primary": {
       "type": "button",
-      "label": "GitHub",
-      "href": "https://github.com/dim-gg"
+      "label": "Play DIM",
+      "href": "https://dim.cool"
     }
   },
   "contextual": {
@@ -113,7 +108,6 @@
   "footer": {
     "socials": {
       "x": "https://x.com/dimcool",
-      "github": "https://github.com/dim-gg"
     }
   },
   "feedback": {
