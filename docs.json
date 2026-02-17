@@ -26,6 +26,7 @@
             "group": "Guides",
             "pages": [
               "guides/authentication",
+              "guides/agent-messaging",
               "guides/friends",
               "guides/chat",
               "guides/payments",

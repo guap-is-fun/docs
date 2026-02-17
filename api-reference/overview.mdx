@@ -69,4 +69,42 @@ See the [authentication guide](/guides/authentication) for how to obtain a JWT t
 - `GET /referrals/me/rewards` — Reward history
 - `POST /referrals/me/claim` — Claim pending rewards
 
+### Support
+- `POST /support` — Create support ticket
+- `GET /support/me` — List your tickets
+- `GET /support/me/:id` — Get ticket details
+- `POST /support/me/:id/messages` — Add message to ticket
+- `PATCH /support/me/:id/close` — Close ticket
+
+### Leaderboards
+- `GET /leaderboards/global` — Global leaderboard
+- `GET /leaderboards/game/:type` — Per-game leaderboard
+- `GET /leaderboards/friends` — Friends leaderboard
+
+### Notifications
+- `GET /notifications` — List notifications
+- `PATCH /notifications/:id/read` — Mark notification as read
+- `POST /notifications/read-all` — Mark all as read
+
+### Achievements
+- `GET /achievements` — All achievement definitions
+- `GET /achievements/me` — Your unlocked achievements
+- `GET /achievements/user/:id` — User's achievements
+
+### Activity
+- `GET /activity/feed` — Global activity feed
+
+### Spectate
+- `GET /spectate/live-players` — Live players with game info
+
+### Betting
+- `GET /games/:id/bets` — Get bets for a game
+- `POST /games/:id/bets/prepare` — Prepare a bet
+- `POST /games/:id/bets/submit` — Submit signed bet
+
+### Profile
+- `PATCH /users/me/profile` — Update profile
+- `POST /users/me/avatar` — Upload avatar
+- `POST /users/me/cover` — Upload cover image
+
 For detailed request/response formats, see the [guides](/guides/authentication).
