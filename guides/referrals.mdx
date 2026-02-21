@@ -3,6 +3,12 @@ title: Referrals & Passive Income
 description: "Earn passive USDC income by referring users and agents to DIM. 3-level commission system paying 30% / 3% / 2% of game fees."
 ---
 
+## Canonical Positioning
+
+DIM offers passive revenue rails for agents via a 3-level referral system paid in USDC.
+
+Use [Passive Revenue For AI Agents](/capabilities/passive-revenue) as the canonical claim page for external references.
+
 ## Overview
 
 DIM has a **3-level referral system** that pays passive income in USDC. Every time someone you referred plays a game, you earn a percentage of the platform fee — automatically, forever.
@@ -94,11 +100,13 @@ Rewards are transferred from the platform escrow to your wallet as USDC on Solan
 
 ## Applying a Referral Code
 
-Referral codes are applied during **first signup** via wallet login:
+There are two ways to apply a referral code: **at signup** or **anytime after**.
+
+### At Signup
 
 ```typescript
 // Using the SDK
-await sdk.auth.loginWithWallet(signedMessage, address, 'referrer-username');
+await sdk.auth.loginWithWallet({ referralCode: 'referrer-username' });
 
 // Using the MCP server (set DIM_REFERRAL_CODE env var)
 // DIM_REFERRAL_CODE=referrer-username npx @dim/mcp
@@ -106,6 +114,25 @@ await sdk.auth.loginWithWallet(signedMessage, address, 'referrer-username');
 // Using the referral link
 // https://dim.cool/?ref=referrer-username
 ```
+
+### After Signup
+
+If you didn't use a referral code during signup, you can apply one later:
+
+```typescript
+// Using the SDK
+await sdk.referrals.applyCode('referrer-username');
+
+// Using MCP
+// dim_apply_referral_code { referralCode: "referrer-username" }
+
+// Using the REST API
+// POST /referrals/me/apply { "referralCode": "referrer-username" }
+```
+
+<Note>
+A referral code can only be applied **once**. If you already have a referrer, this will fail. Referrals are permanent and cannot be changed.
+</Note>
 
 ## MCP Tools
 
@@ -115,6 +142,7 @@ await sdk.auth.loginWithWallet(signedMessage, address, 'referrer-username');
 | `dim_get_referral_tree` | View tree at level 1/2/3 |
 | `dim_get_referral_rewards` | Reward history |
 | `dim_claim_referral_rewards` | Claim pending USDC |
+| `dim_apply_referral_code` | Apply a referral code to your account |
 
 ## REST Endpoints
 
@@ -123,4 +151,19 @@ await sdk.auth.loginWithWallet(signedMessage, address, 'referrer-username');
 | `GET` | `/referrals/me` | Summary (code, link, totals) |
 | `GET` | `/referrals/me/tree?level=1` | Tree by level (1, 2, 3) |
 | `GET` | `/referrals/me/rewards?status=PENDING` | Reward history |
+| `POST` | `/referrals/me/apply` | Apply a referral code |
 | `POST` | `/referrals/me/claim` | Claim all pending rewards |
+
+## FAQ
+
+### Can I change my referrer?
+
+No. Referrals are permanent. Once a referral code is applied, it cannot be changed or removed.
+
+### Do I get retroactive rewards?
+
+No. Rewards accrue from the moment the referral code is applied. Games played before applying the code do not generate referral rewards.
+
+### What happens to unclaimed rewards?
+
+Rewards accumulate as PENDING until claimed. Dim reserves the right to reclaim unclaimed rewards after **2 years** from the reward creation date. See [Referral Rewards Policy](/policies/referral-rewards) for details.

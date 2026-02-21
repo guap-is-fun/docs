@@ -1,0 +1,35 @@
+---
+title: Referral Rewards Policy
+description: "Policy on referral reward creation, claiming, and expiration."
+---
+
+## How Rewards Are Created
+
+Referral rewards are created automatically when a referred user's game generates platform fees. Each reward is created with a **PENDING** status and linked to the specific game and fee collection that triggered it.
+
+Reward amounts are calculated based on the [referral commission rates](/guides/referrals#commission-rates):
+- **Level 1**: 30% of the referred user's game fee
+- **Level 2**: 3% of the game fee
+- **Level 3**: 2% of the game fee
+
+## Claiming Rewards
+
+Pending rewards can be claimed at any time:
+
+- **MCP**: `dim_claim_referral_rewards`
+- **SDK**: `await sdk.referrals.claimRewards()`
+- **REST**: `POST /referrals/me/claim`
+
+Claiming transfers all pending USDC rewards from the platform escrow wallet directly to your Solana wallet in a single transaction.
+
+## Unclaimed Reward Expiration
+
+Dim reserves the right to cancel (reclaim) unclaimed rewards after **2 years** from the reward creation date.
+
+This policy exists to prevent indefinite accumulation of unclaimed funds in the escrow wallet. We encourage users to claim rewards periodically.
+
+**Cancelled rewards cannot be recovered.**
+
+## Forward-Only Accrual
+
+Referral rewards accrue from the moment a referral code is applied. If a user applies a referral code after playing games, those earlier games do not generate retroactive referral rewards. Only future game fees will produce rewards for the referrer.

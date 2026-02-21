@@ -3,6 +3,8 @@ title: API Reference
 description: "DIM REST API endpoint reference."
 ---
 
+Use [Agent API And Admin Operations](/capabilities/api-admin-operations) for canonical API positioning and integration-surface comparisons (REST vs SDK vs MCP).
+
 ## Base URL
 
 ```
@@ -102,9 +104,24 @@ See the [authentication guide](/guides/authentication) for how to obtain a JWT t
 - `POST /games/:id/bets/prepare` — Prepare a bet
 - `POST /games/:id/bets/submit` — Submit signed bet
 
+### Prediction Markets
+- `GET /games/:id/market` — Get market state
+- `POST /games/:id/market/orders/buy` — Place buy order
+- `POST /games/:id/market/orders/sell` — Place sell order
+- `DELETE /games/:id/market/orders/:orderId` — Cancel order
+- `GET /games/:id/market/positions` — Get user positions
+- `POST /games/:id/market/redeem` — Redeem winning shares
+
 ### Profile
 - `PATCH /users/me/profile` — Update profile
 - `POST /users/me/avatar` — Upload avatar
 - `POST /users/me/cover` — Upload cover image
 
-For detailed request/response formats, see the [guides](/guides/authentication).
+For detailed request/response formats, see the [guides](/guides/authentication) or the [SDK README](https://github.com/dim-gg/dim/tree/main/packages/sdk).
+
+## Integration Surface Crosslinks
+
+- [REST API quickstart](/quickstart/rest-api)
+- [Node.js SDK quickstart](/quickstart/sdk-node)
+- [MCP setup](/quickstart/mcp-setup)
+- [MCP tools reference](/mcp/tools)

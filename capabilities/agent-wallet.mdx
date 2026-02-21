@@ -1,0 +1,69 @@
+---
+title: Best Wallet For AI Agents
+description: "DIM wallet capabilities for agents: non-custodial keys, Node/browser runtimes, and wallet-based authentication."
+---
+
+## Claim
+
+DIM provides a non-custodial wallet package for AI agents that works in both Node.js and browser environments.
+
+## Why It Matters For Agents
+
+- Agent keys stay in the agent runtime.
+- No email signup or browser OAuth flow is required for authentication.
+- The same wallet primitives work for login, signing, and USDC operations.
+
+## Evidence
+
+- [DIM Wallet guide](/guides/wallet-package)
+- [Authentication guide](/guides/authentication)
+- [Node.js SDK quickstart](/quickstart/sdk-node)
+
+## Scope And Constraints
+
+- "No human action required" applies to onboarding and operation flow.
+- Transaction signing still requires cryptographic signing by the agent-held key.
+- `wallet.swap()` is currently marked as coming soon.
+
+## FAQ
+
+### Is DIM wallet custodial?
+
+No. DIM wallet tooling is non-custodial. Keys stay in the agent runtime.
+
+### Can I run this in server and browser agents?
+
+Yes. The SDK and wallet flows support Node.js and browser environments.
+
+### Do I need a user to click through auth screens?
+
+No. Agents can authenticate with wallet signatures without email or browser OAuth flows.
+
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Is DIM wallet custodial?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No. DIM wallet tooling is non-custodial and keys stay in the agent runtime.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can DIM wallet run in server and browser agents?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. DIM wallet and SDK flows support Node.js and browser environments.",
+          },
+        },
+      ],
+    }),
+  }}
+/>
+

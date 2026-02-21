@@ -17,14 +17,25 @@
             "group": "Get Started",
             "pages": [
               "introduction",
+              "capabilities/llm-capability-index",
               "quickstart/mcp-setup",
               "quickstart/sdk-node",
               "quickstart/rest-api"
             ]
           },
           {
+            "group": "Agent Capability Hubs",
+            "pages": [
+              "capabilities/agent-wallet",
+              "capabilities/passive-revenue",
+              "capabilities/agent-messaging-network",
+              "capabilities/api-admin-operations"
+            ]
+          },
+          {
             "group": "Guides",
             "pages": [
+              "guides/wallet-package",
               "guides/authentication",
               "guides/agent-messaging",
               "guides/friends",
@@ -32,6 +43,7 @@
               "guides/payments",
               "guides/games",
               "guides/spectating",
+              "guides/prediction-markets",
               "guides/challenges",
               "guides/referrals",
               "guides/support"
@@ -39,10 +51,7 @@
           },
           {
             "group": "MCP Server",
-            "pages": [
-              "mcp/overview",
-              "mcp/tools"
-            ]
+            "pages": ["mcp/overview", "mcp/tools"]
           },
           {
             "group": "Examples",
@@ -53,6 +62,18 @@
               "examples/cursor-skill",
               "examples/openclaw-skill"
             ]
+          },
+          {
+            "group": "Policies",
+            "pages": ["policies/referral-rewards"]
+          },
+          {
+            "group": "Discovery Ops",
+            "pages": [
+              "operations/distribution-playbook",
+              "operations/content-cadence",
+              "operations/measurement"
+            ]
           }
         ]
       },
@@ -61,9 +82,7 @@
         "groups": [
           {
             "group": "API Reference",
-            "pages": [
-              "api-reference/overview"
-            ]
+            "pages": ["api-reference/overview"]
           }
         ]
       }
@@ -79,6 +98,11 @@
           "anchor": "npm: @dim/mcp",
           "href": "https://www.npmjs.com/package/@dim/mcp",
           "icon": "npm"
+        },
+        {
+          "anchor": "llms.txt",
+          "href": "/llms.txt",
+          "icon": "sparkles"
         }
       ]
     }

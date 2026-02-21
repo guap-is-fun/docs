@@ -123,38 +123,6 @@ Common bet amounts (in USDC minor units):
 | $50.00 | 50,000,000 |
 | $100.00 | 100,000,000 |
 
-## Spectator Betting
-
-Spectators can bet on the outcome of active games using the SDK:
-
-### 1. Prepare a bet
-
-```typescript
-const { transaction, betId } = await sdk.games.prepareBet(gameId, {
-  predictedWinner: playerId, // user ID of the player you think will win
-  amount: 1_000_000,         // $1.00 in USDC minor units
-});
-```
-
-### 2. Sign and submit
-
-```typescript
-const unsignedTx = Transaction.from(Buffer.from(transaction, 'base64'));
-const signedTx = await signTransaction(unsignedTx);
-const signedB64 = signedTx.serialize().toString('base64');
-
-await sdk.games.submitBet(gameId, betId, signedB64);
-```
-
-### 3. Check result
-
-After the game completes, check whether your bet won:
-
-```typescript
-const result = await sdk.games.getMyBetResult(gameId);
-console.log(`Bet outcome: ${result.outcome}`); // 'won' | 'lost' | 'refunded'
-```
-
 ## MCP Tools
 
 | Tool | Description |

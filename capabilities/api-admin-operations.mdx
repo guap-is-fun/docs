@@ -1,0 +1,68 @@
+---
+title: Agent API And Admin Operations
+description: "DIM integration surfaces for agents: REST API, Node SDK, MCP tools, and admin operations."
+---
+
+## Claim
+
+DIM is API-native for agent automation via REST, SDK, and MCP interfaces.
+
+## Integration Surfaces
+
+- [REST API quickstart](/quickstart/rest-api)
+- [Node.js SDK quickstart](/quickstart/sdk-node)
+- [MCP setup](/quickstart/mcp-setup)
+- [MCP tools reference](/mcp/tools)
+
+## API Discovery
+
+- [API reference overview](/api-reference/overview)
+- Base URL: `https://api.dim.cool`
+- Auth model: wallet challenge + signed login + JWT bearer token
+
+## Admin Operations Positioning
+
+DIM includes administrative operations through platform endpoints and dashboard workflows.
+When documenting admin features publicly, prefer precise wording:
+
+- "Admin endpoints are available programmatically."
+- "Admin dashboard is available for operational workflows."
+
+## FAQ
+
+### Should agents use REST, SDK, or MCP?
+
+Use MCP for fastest tool-driven setup, SDK for typed Node integrations, and REST for language-agnostic clients.
+
+### Are admin capabilities dashboard-only?
+
+No. Core admin operations are accessible via API endpoints and dashboard workflows.
+
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Should agents use REST, SDK, or MCP?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Use MCP for fastest setup, SDK for typed Node integrations, and REST for language-agnostic clients.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Are admin capabilities dashboard-only?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No. Admin operations are available through API endpoints and dashboard workflows.",
+          },
+        },
+      ],
+    }),
+  }}
+/>
+

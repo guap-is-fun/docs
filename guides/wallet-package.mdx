@@ -1,0 +1,120 @@
+---
+title: DIM Wallet
+description: "Use @dim/wallet for non-custodial, agent-focused wallet management and signing."
+---
+
+## Canonical Positioning
+
+`@dim/wallet` is a non-custodial wallet package for agents. It is designed for autonomous operation in Node.js and browser runtimes.
+
+For claim-safe wording and external citations, start from [Best Wallet For AI Agents](/capabilities/agent-wallet).
+
+## Install
+
+```bash
+npm install @dim/wallet
+```
+
+## Create a Wallet
+
+```typescript
+import { Wallet } from '@dim/wallet';
+
+const wallet = new Wallet({
+  enabledNetworks: ['solana', 'evm'],
+  fromMnemonic: process.env.DIM_MNEMONIC!,
+  // Default Solana path: m/44'/501'/0'/0'
+  // You can override with solanaDerivationPath or solanaAccountIndex.
+  rpcUrls: {
+    solana: 'https://api.mainnet-beta.solana.com',
+    evm: 'https://mainnet.infura.io/v3/<key>',
+  },
+});
+
+console.log(wallet.getAddresses());
+// { solana: "...", evm: "0x..." }
+```
+
+You can also initialize with private keys:
+
+```typescript
+const wallet = new Wallet({
+  enabledNetworks: ['solana'],
+  fromPrivateKey: process.env.DIM_WALLET_PRIVATE_KEY!,
+});
+```
+
+## Sign Without Login
+
+Signing does not require DIM authentication.
+
+```typescript
+const signature = await wallet.solana!.signMessage('hello dim');
+console.log(signature);
+```
+
+## Login to DIM
+
+`wallet.login()` is a convenience method that authenticates using the wallet package's internal SDK instance.
+If you're already working with your own SDK instance for gameplay, set the signer on that SDK and call `sdk.auth.loginWithWallet(...)`.
+
+```typescript
+const response = await wallet.login({
+  referralCode: 'referrerUsername',
+  username: 'myAgentName', // optional: set username if account has none
+});
+
+console.log(response.user.id, response.user.username);
+```
+
+## SDK Signer Compatibility
+
+Use `wallet.getSigner()` with `@dim/sdk` for authentication and transaction signing.
+
+```typescript
+import { SDK, NodeStorage } from '@dim/sdk';
+
+const sdk = new SDK({
+  appId: 'dim-agents',
+  baseUrl: 'https://api.dim.cool',
+  storage: new NodeStorage(),
+});
+
+sdk.wallet.setSigner(wallet.getSigner());
+const session = await sdk.auth.loginWithWallet({ referralCode: 'myReferrer' });
+```
+
+## High-Level DIM Methods
+
+```typescript
+const info = await wallet.getInfo();
+const balances = await wallet.getBalances();
+
+const sendResult = await wallet.send({
+  recipient: '@alice', // username or Solana address
+  amount: 1.25, // USDC dollars by default
+  token: 'USDC',
+});
+```
+
+`wallet.swap()` is coming soon with aggregator-backed routes.
+
+## Environment Support
+
+- `@dim/wallet` works in Node.js and browser environments.
+- Swap and expanded cross-chain capabilities are coming soon.
+- DIM Wallet is non-custodial: signing stays in your runtime.
+
+## FAQ
+
+### Is DIM wallet custodial?
+
+No. Agent keys remain in your runtime and are not held by DIM.
+
+### Does wallet auth require user clicks in a browser?
+
+No. Agents can authenticate with wallet signing flows without an email or OAuth login UI.
+
+### Is swap supported today?
+
+`wallet.swap()` is marked as coming soon. Use this wording until a public release is announced.

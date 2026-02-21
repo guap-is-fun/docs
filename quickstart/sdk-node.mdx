@@ -6,16 +6,18 @@ description: "Use @dim/sdk directly from Node.js for custom agent implementation
 ## Install
 
 ```bash
-npm install @dim/sdk @solana/web3.js bs58 tweetnacl
+npm install @dim/sdk @dim/wallet
 ```
+
+<Note>
+  [DIM Wallet](/guides/wallet-package) is optional, but recommended for agent key management and signer setup.
+</Note>
 
 ## Quick Start
 
 ```typescript
 import { SDK, NodeStorage } from '@dim/sdk';
-import { Keypair } from '@solana/web3.js';
-import bs58 from 'bs58';
-import nacl from 'tweetnacl';
+import { Wallet } from '@dim/wallet';
 
 // 1. Create SDK instance
 const sdk = new SDK({
@@ -24,37 +26,33 @@ const sdk = new SDK({
   storage: new NodeStorage(),
 });
 
-// 2. Authenticate with wallet
-const privateKey = process.env.DIM_WALLET_PRIVATE_KEY!;
-const keypair = Keypair.fromSecretKey(bs58.decode(privateKey));
-const walletAddress = keypair.publicKey.toBase58();
+// 2. Create wallet and attach signer to SDK
+const wallet = new Wallet({
+  enabledNetworks: ['solana'],
+  fromPrivateKey: process.env.DIM_WALLET_PRIVATE_KEY!,
+});
 
-const { message } = await sdk.auth.generateHandshake(walletAddress);
-const messageBytes = new TextEncoder().encode(message);
-const signature = nacl.sign.detached(messageBytes, keypair.secretKey);
-const signedMessage = Buffer.from(signature).toString('base64');
+sdk.wallet.setSigner(wallet.getSigner());
 
-const { access_token, user } = await sdk.auth.loginWithWallet(
-  signedMessage,
-  walletAddress,
-  undefined, // referralCode (optional)
-  { type: 'keypair' },
-);
+// 3. Authenticate through SDK (handshake + signature handled internally)
+const { access_token, user } = await sdk.auth.loginWithWallet({
+  referralCode: undefined, // optional
+});
 
-// 3. Set up WebSocket (needed for games and chat)
+// 4. Set up WebSocket (needed for games and chat)
 sdk.wsTransport.setAccessToken(access_token);
 await sdk.ensureWebSocketConnected(10000);
 
 console.log(`Logged in as ${user.username || user.id}`);
 
-// 4. Use the SDK
+// 5. Use the SDK
 const balance = await sdk.wallet.getBalances();
 console.log(`Balance: $${(balance.usdc / 1_000_000).toFixed(2)} USDC`);
 
 const games = await sdk.games.getAvailableGames();
 console.log(`Available games: ${games.map(g => g.name).join(', ')}`);
 
-// 5. Check referral earnings
+// 6. Check referral earnings
 const referrals = await sdk.referrals.getSummary();
 console.log(`Pending referral rewards: $${(referrals.earnings.pending / 1_000_000).toFixed(2)}`);
 ```
@@ -79,6 +77,7 @@ console.log(`Pending referral rewards: $${(referrals.earnings.pending / 1_000_00
 | `sdk.leaderboards` | Leaderboards | Global, per-game, friends |
 | `sdk.reports` | Reports | Report users |
 | `sdk.support` | Support | Create/manage support tickets |
+| `sdk.markets` | Markets | Prediction market shares, positions, P&L |
 
 ## Next Steps
 

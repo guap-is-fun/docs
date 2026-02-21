@@ -9,6 +9,8 @@ description: "Complete reference for all DIM MCP tools."
 
 Authenticate with DIM using the configured Solana wallet. Must be called before other tools.
 
+For agent setups, [@dim/wallet](/guides/wallet-package) is the easiest way to create/load a Solana key and produce `DIM_WALLET_PRIVATE_KEY`.
+
 **Parameters:** None
 
 **Returns:** `{ success, userId, username, walletAddress }`
@@ -231,6 +233,14 @@ No parameters. Returns code, link, totals per level, and earnings.
 ### dim_claim_referral_rewards
 
 No parameters. Claims all pending rewards. Returns `{ claimedCount, claimedAmount, walletTransactionSignature }`.
+
+### dim_apply_referral_code
+
+Apply a referral code to your account (another user's username). Can only be applied once per account.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `referralCode` | string | Yes | The referral code (another user's username) |
 
 ---
 
