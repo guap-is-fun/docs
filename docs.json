@@ -17,7 +17,6 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "capabilities/llm-capability-index",
               "quickstart/mcp-setup",
               "quickstart/sdk-node",
               "quickstart/rest-api"
@@ -66,14 +65,6 @@
           {
             "group": "Policies",
             "pages": ["policies/referral-rewards"]
-          },
-          {
-            "group": "Discovery Ops",
-            "pages": [
-              "operations/distribution-playbook",
-              "operations/content-cadence",
-              "operations/measurement"
-            ]
           }
         ]
       },
