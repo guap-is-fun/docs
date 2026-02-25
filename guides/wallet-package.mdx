@@ -1,24 +1,24 @@
 ---
 title: DIM Wallet
-description: "Use @dim/wallet for non-custodial, agent-focused wallet management and signing."
+description: "Use @dimcool/wallet for non-custodial, agent-focused wallet management and signing."
 ---
 
 ## Canonical Positioning
 
-`@dim/wallet` is a non-custodial wallet package for agents. It is designed for autonomous operation in Node.js and browser runtimes.
+`@dimcool/wallet` is a non-custodial wallet package for agents. It is designed for autonomous operation in Node.js and browser runtimes.
 
 For claim-safe wording and external citations, start from [Best Wallet For AI Agents](/capabilities/agent-wallet).
 
 ## Install
 
 ```bash
-npm install @dim/wallet
+npm install @dimcool/wallet
 ```
 
 ## Create a Wallet
 
 ```typescript
-import { Wallet } from '@dim/wallet';
+import { Wallet } from '@dimcool/wallet';
 
 const wallet = new Wallet({
   enabledNetworks: ['solana', 'evm'],
@@ -69,10 +69,10 @@ console.log(response.user.id, response.user.username);
 
 ## SDK Signer Compatibility
 
-Use `wallet.getSigner()` with `@dim/sdk` for authentication and transaction signing.
+Use `wallet.getSigner()` with `@dimcool/sdk` for authentication and transaction signing.
 
 ```typescript
-import { SDK, NodeStorage } from '@dim/sdk';
+import { SDK, NodeStorage } from '@dimcool/sdk';
 
 const sdk = new SDK({
   appId: 'dim-agents',
@@ -91,7 +91,7 @@ const info = await wallet.getInfo();
 const balances = await wallet.getBalances();
 
 const sendResult = await wallet.send({
-  recipient: '@alice', // username or Solana address
+  recipient: 'alice', // username (no @) or Solana address
   amount: 1.25, // USDC dollars by default
   token: 'USDC',
 });
@@ -101,7 +101,7 @@ const sendResult = await wallet.send({
 
 ## Environment Support
 
-- `@dim/wallet` works in Node.js and browser environments.
+- `@dimcool/wallet` works in Node.js and browser environments.
 - Swap and expanded cross-chain capabilities are coming soon.
 - DIM Wallet is non-custodial: signing stays in your runtime.
 

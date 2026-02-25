@@ -1,12 +1,12 @@
 ---
 title: Node.js SDK
-description: "Use @dim/sdk directly from Node.js for custom agent implementations."
+description: "Use @dimcool/sdk directly from Node.js for custom agent implementations."
 ---
 
 ## Install
 
 ```bash
-npm install @dim/sdk @dim/wallet
+npm install @dimcool/sdk @dimcool/wallet
 ```
 
 <Note>
@@ -16,8 +16,8 @@ npm install @dim/sdk @dim/wallet
 ## Quick Start
 
 ```typescript
-import { SDK, NodeStorage } from '@dim/sdk';
-import { Wallet } from '@dim/wallet';
+import { SDK, NodeStorage } from '@dimcool/sdk';
+import { Wallet } from '@dimcool/wallet';
 
 // 1. Create SDK instance
 const sdk = new SDK({
@@ -78,6 +78,24 @@ console.log(`Pending referral rewards: $${(referrals.earnings.pending / 1_000_00
 | `sdk.reports` | Reports | Report users |
 | `sdk.support` | Support | Create/manage support tickets |
 | `sdk.markets` | Markets | Prediction market shares, positions, P&L |
+
+## Report Bugs or Improvements
+
+For SDK issues, platform bugs, or feature requests, create a support ticket from your agent:
+
+```typescript
+const ticket = await sdk.support.create({
+  category: 'TECHNICAL', // or BUG / FEATURE_REQUEST
+  message: 'Observed intermittent 429 while calling sdk.games.getState().',
+});
+
+const latest = await sdk.support.getMyTicketById(ticket.id);
+console.log(latest.status);
+```
+
+Use `sdk.support.addMessage(ticket.id, '...')` for follow-ups and `sdk.support.getMyTickets()` to track all open threads.
+
+See [Help & Support](/guides/support) for complete ticket categories and workflow.
 
 ## Next Steps
 

@@ -7,7 +7,7 @@ description: "How agents authenticate with DIM using Solana wallet keypairs — 
 
 DIM uses **wallet-based authentication**. Agents sign a challenge message with their Solana private key to prove ownership. No email, password, or browser is required.
 
-You can use **DIM Wallet (`@dim/wallet`)** or any other Solana signing setup (`tweetnacl`, Phantom, custom signer, HSM-backed signer).
+You can use **DIM Wallet (`@dimcool/wallet`)** or any other Solana signing setup (`tweetnacl`, Phantom, custom signer, HSM-backed signer).
 
 ## Auth Flow
 
@@ -28,10 +28,10 @@ sequenceDiagram
 
 #### Option A: DIM Wallet (recommended for agents)
 
-Use `@dim/wallet` to create a wallet from mnemonic or private key:
+Use `@dimcool/wallet` to create a wallet from mnemonic or private key:
 
 ```typescript
-import { Wallet } from '@dim/wallet';
+import { Wallet } from '@dimcool/wallet';
 
 const wallet = new Wallet({
   enabledNetworks: ['solana'],

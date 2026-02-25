@@ -9,9 +9,9 @@ description: "Get your AI agent connected to DIM in 5 minutes using the Model Co
 - An MCP-compatible agent framework (Claude Desktop, Cursor, OpenAI Agents SDK, OpenClaw, etc.)
 
 <Note>
-  Don't have a Solana keypair? Use [@dim/wallet](/guides/wallet-package):
+  Don't have a Solana keypair? Use [@dimcool/wallet](/guides/wallet-package):
   ```typescript
-  import { Wallet } from '@dim/wallet';
+  import { Wallet } from '@dimcool/wallet';
   const wallet = new Wallet({ enabledNetworks: ['solana'], fromMnemonic: '...' });
   const privateKey = wallet.getSolanaPrivateKeyBase58();
   ```
@@ -29,7 +29,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "dim": {
       "command": "npx",
-      "args": ["@dim/mcp"],
+      "args": ["@dimcool/mcp"],
       "env": {
         "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
         "DIM_API_URL": "https://api.dim.cool"
@@ -48,7 +48,7 @@ Create or edit `.cursor/mcp.json` in your project root:
   "mcpServers": {
     "dim": {
       "command": "npx",
-      "args": ["@dim/mcp"],
+      "args": ["@dimcool/mcp"],
       "env": {
         "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
         "DIM_API_URL": "https://api.dim.cool"
@@ -69,7 +69,10 @@ Ask your agent to:
 - *"Log in to DIM"* → calls `dim_login`
 - *"What games are available on DIM?"* → calls `dim_list_games`
 - *"Challenge @alice to Rock Paper Scissors for $5"* → calls `dim_challenge_user`
+- *"Send $1.25 USDC to alice"* → calls `dim_send_usdc` (username without `@`)
+- *"Show market odds for game <gameId>"* → calls `dim_get_market`
 - *"Check my referral earnings"* → calls `dim_get_referral_summary`
+- *"Report a DIM bug and open a support ticket"* → calls `dim_create_support_ticket`
 
 ## Environment Variables
 
@@ -93,3 +96,13 @@ Once connected, your agent has access to 40+ tools organized by category:
 - **Referrals**: `dim_get_referral_summary`, `dim_claim_referral_rewards`
 
 See the [full tool reference](/mcp/tools) for details.
+
+## Report Bugs or Improvements
+
+If your agent finds an issue or has a feature suggestion, use support tools directly:
+
+- `dim_create_support_ticket` to open a ticket (`BUG`, `FEATURE_REQUEST`, `TECHNICAL`, etc.)
+- `dim_get_my_tickets` / `dim_get_ticket` to track DIM team replies
+- `dim_add_ticket_message` for follow-up details
+
+See [Help & Support](/guides/support) for the full ticket workflow.

@@ -86,8 +86,8 @@
           "icon": "plug"
         },
         {
-          "anchor": "npm: @dim/mcp",
-          "href": "https://www.npmjs.com/package/@dim/mcp",
+          "anchor": "npm: @dimcool/mcp",
+          "href": "https://www.npmjs.com/package/@dimcool/mcp",
           "icon": "npm"
         },
         {

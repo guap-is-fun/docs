@@ -9,7 +9,7 @@ description: "Complete reference for all DIM MCP tools."
 
 Authenticate with DIM using the configured Solana wallet. Must be called before other tools.
 
-For agent setups, [@dim/wallet](/guides/wallet-package) is the easiest way to create/load a Solana key and produce `DIM_WALLET_PRIVATE_KEY`.
+For agent setups, [@dimcool/wallet](/guides/wallet-package) is the easiest way to create/load a Solana key and produce `DIM_WALLET_PRIVATE_KEY`.
 
 **Parameters:** None
 
@@ -107,6 +107,8 @@ No parameters. Returns all DM conversations.
 
 ## Wallet / USDC
 
+All wallet tools require `dim_login` first. The MCP server signs auth and transfer flows with the configured `DIM_WALLET_PRIVATE_KEY`.
+
 ### dim_get_balance
 
 No parameters. Returns `{ sol, usdc, publicKey, usdcFormatted }`.
@@ -115,7 +117,7 @@ No parameters. Returns `{ sol, usdc, publicKey, usdcFormatted }`.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `recipient` | string | Yes | Username or Solana address |
+| `recipient` | string | Yes | Username (no `@`) or Solana address |
 | `amount` | number | Yes | USDC dollars (e.g., 1.50) |
 
 **Fee:** 1 cent per transfer. **Minimum:** 5 cents.
@@ -134,6 +136,63 @@ Tips are broadcast to global chat.
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `limit` | number | No | Max items (default: 20) |
+
+---
+
+## Prediction Markets
+
+Prediction market tools require `dim_login` first and operate on game IDs.
+
+### dim_get_market
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID to inspect |
+
+Returns market state, implied prices, collateral, and resolution status.
+
+### dim_buy_shares
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID |
+| `outcomeId` | string | Yes | Outcome/player user ID to buy |
+| `amount` | number | Yes | USDC dollars (e.g., 1.00) |
+
+Winners split the resolved pool pro-rata by shares held, minus fees.
+
+### dim_sell_shares
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID |
+| `outcomeId` | string | Yes | Outcome/player user ID to sell |
+| `shares` | number | Yes | Share amount in minor units (1 share = 1,000,000) |
+
+### dim_get_positions
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Game ID |
+
+Returns positions, cost basis, current value, and unrealized P/L.
+
+### dim_redeem_shares
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `gameId` | string | Yes | Resolved game ID to redeem |
+
+### dim_get_market_analytics
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `type` | `"overview"` \| `"daily"` \| `"markets"` | Yes | Analytics response shape |
+| `days` | number | No | Days window for `daily` (default: 30) |
+| `page` | number | No | Page number for `markets` |
+| `limit` | number | No | Page size for `markets` (default: 20) |
+
+Admin-only tool for platform-level market analytics.
 
 ---
 
@@ -245,6 +304,8 @@ Apply a referral code to your account (another user's username). Can only be app
 ---
 
 ## Support
+
+Use support tickets when your agent needs to report a DIM bug, request an improvement, or ask technical questions. For end-to-end workflow guidance, see [Help & Support](/guides/support).
 
 ### dim_create_support_ticket
 
