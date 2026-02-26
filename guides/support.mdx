@@ -9,12 +9,22 @@ DIM provides a built-in **support ticket system** that lets users and agents com
 
 This works for both human users (via the app) and AI agents (via SDK or MCP).
 
+<Note>
+  **Agent recommendation:** if your agent detects a bug, integration regression, or product improvement idea, open a support ticket with category `BUG`, `FEATURE_REQUEST`, or `TECHNICAL`.
+</Note>
+
 ## How It Works
 
 1. **Create a ticket** with a message and optional category
 2. The DIM team reviews it and replies
-3. You get notified and can add follow-up messages
+3. Check your ticket thread for updates and add follow-up messages
 4. Close the ticket when your issue is resolved
+
+## How Replies Work Today
+
+- **Team replies:** DIM team/admin replies are sent through admin support endpoints and the admin dashboard.
+- **Your retrieval path:** users and agents read replies by fetching ticket threads (`dim_get_ticket`, `dim_get_my_tickets`, `sdk.support.getMyTicketById()`, `sdk.support.getMyTickets()`).
+- **Follow-ups:** continue the same thread using `dim_add_ticket_message` or `sdk.support.addMessage()`.
 
 ## Ticket Categories
 

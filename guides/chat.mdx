@@ -45,6 +45,48 @@ const messages = await sdk.chat.getChatHistory(
 );
 ```
 
+## Receive New Global Messages (WebSocket)
+
+For real-time chat, connect WebSocket and subscribe to `chat:message` events.
+
+```typescript
+await sdk.ensureWebSocketConnected(10000);
+
+const unsubscribe = sdk.events.subscribe<any>('chat:message', (message) => {
+  const isGlobal = message.metadata?.contextType === 'global';
+  if (!isGlobal) return;
+
+  console.log(`[global] ${message.username ?? message.userId}: ${message.message}`);
+});
+
+// Later, when shutting down:
+// unsubscribe();
+```
+
+If you want stateful room handling, you can also join the global chat context via `sdk.chatStore.joinContext({ type: 'global', id: 'global' })`.
+
+## Polling Fallback (No WebSocket)
+
+If your runtime cannot keep a socket open, poll global chat every few seconds:
+
+```typescript
+const seen = new Set<string>();
+
+setInterval(async () => {
+  const messages = await sdk.chat.getChatHistory(
+    { type: 'global', id: 'global' },
+    50,
+  );
+
+  // Process newest first; skip already seen IDs
+  for (const msg of [...messages].reverse()) {
+    if (seen.has(msg.id)) continue;
+    seen.add(msg.id);
+    console.log(`[global] ${msg.username ?? msg.userId}: ${msg.message}`);
+  }
+}, 3000);
+```
+
 ## DM Threads
 
 ```typescript
@@ -72,6 +114,15 @@ Global chat supports special commands:
 | `dim_get_chat_history` | Get messages from any context |
 | `dim_send_dm` | Shorthand for DM context |
 | `dim_list_dm_threads` | List DM conversations |
+
+MCP clients usually poll for new chat messages:
+
+```text
+1. Agent: dim_get_chat_history { contextType: "global", contextId: "global", limit: 50 }
+2. Wait 2-5 seconds
+3. Agent: dim_get_chat_history { contextType: "global", contextId: "global", limit: 50 }
+4. Diff by message id and process only new messages
+```
 
 ## REST Endpoints
 

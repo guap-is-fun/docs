@@ -94,27 +94,14 @@ When consuming chat messages, check `message.metadata?.role === 'spectator'` to 
 
 Spectators can add USDC to the game pot. The winner receives **player pot + spectator donations** minus a 1% fee on the full amount.
 
-### 1. Prepare the donation
+### One-call donate to pot
 
-Get an unsigned transfer (user → escrow). Minimum 10¢ (100,000 minor units).
-
-```typescript
-const { transaction, escrowAddress, amountMinor } =
-  await sdk.games.prepareGameDonation(gameId, 1_000_000); // $1
-```
-
-### 2. Sign and submit
-
-Sign the transaction with your wallet, then submit:
+Use the one-call SDK method (prepare, sign, submit handled internally):
 
 ```typescript
-// Decode, sign with your keypair or Phantom
-const unsignedTx = Transaction.from(Buffer.from(transaction, 'base64'));
-const signedTx = await signTransaction(unsignedTx); // your wallet
-const signedB64 = signedTx.serialize().toString('base64');
-
-const result = await sdk.games.donateToGame(gameId, amountMinor, signedB64);
+const result = await sdk.games.sendDonation(gameId, 1_000_000); // $1
 console.log(`Donation confirmed: ${result.signature}`);
+console.log(`Escrow: ${result.escrowAddress}`);
 ```
 
 After a successful donation:
@@ -147,7 +134,7 @@ if (current) {
 | Game state | `GET /games/:gameId/state` or `sdk.games.getGameState(gameId)` | Required |
 | Join game room | WebSocket `join-game` | Required |
 | Game chat (read/send) | Chat API with `context: { type: 'game', id: gameId }` | Required |
-| Donate to pot | `POST /games/:gameId/donate/prepare` + `POST /games/:gameId/donate` | Required |
+| Donate to pot | `sdk.games.sendDonation(gameId, amountMinor)` | Required |
 | User’s current game | `GET /users/:userId/current-game` or `sdk.users.getCurrentGame(userId)` | Optional |
 
 Spectating reuses the same game and chat flows as playing; the only restriction is that **only players can submit game actions** (e.g. `submitAction`). Use spectating to observe matches, engage in chat, and add to the pot.

@@ -19,52 +19,35 @@ USDC amounts are in **minor units** (1 USDC = 1,000,000 minor units).
 
 ## Send USDC
 
-The transfer flow is: **prepare** → **sign** → **submit**.
+Use the one-call wallet send method:
 
 ```typescript
-import { Transaction, Keypair } from '@solana/web3.js';
-
-// Step 1: Prepare (returns unsigned transaction)
-const prepared = await sdk.wallet.prepareTransfer(
-  senderAddress,    // Your Solana address
-  'alice',          // Username or Solana address
-  1_000_000,        // 1.00 USDC in minor units
-);
-
-// Step 2: Sign with your keypair
-const tx = Transaction.from(Buffer.from(prepared.transaction, 'base64'));
-tx.partialSign(keypair);
-const signedTx = tx.serialize({ requireAllSignatures: false }).toString('base64');
-
-// Step 3: Submit
-const result = await sdk.wallet.submitTransfer(
-  signedTx,
-  senderAddress,
-  prepared.recipientAddress,
-  1_000_000,
+const result = await sdk.wallet.send(
+  'alice.sol', // Username, .sol domain, or Solana address
+  1_000_000,   // 1.00 USDC in minor units
+  'USDC',
 );
 console.log(`Sent! Signature: ${result.signature}`);
+console.log(`Resolved recipient: ${result.recipientAddress}`);
 ```
+
+<Note>
+  Recipient resolution supports three formats in transfer flows:
+  - DIM username (for example `alice`)
+  - Solana address (base58)
+  - `.sol` SNS domain (for example `alice.sol`)
+
+  For `.sol`, the backend resolves the domain to its current owner address at prepare time.
+</Note>
 
 ## Tip a User
 
-Tips are transfers that get broadcast to global chat:
+Tips are one-call now as well:
 
 ```typescript
-// Step 1: Prepare tip
-const prepared = await sdk.tips.prepare({
-  recipientUsername: 'alice',
-  amount: 500_000, // $0.50 USDC
-});
-
-// Step 2: Sign and submit (same as transfer)
-// ...
-
-// Step 3: Broadcast to global chat
-await sdk.tips.broadcast({
-  recipientUserId: prepared.recipientUserId,
-  amount: 500_000,
-});
+const tip = await sdk.tips.send('alice', 500_000); // $0.50 USDC
+console.log(tip.signature);
+console.log(tip.message.id); // Broadcast message ID in global chat
 ```
 
 ## Fee Structure

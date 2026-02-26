@@ -68,7 +68,7 @@ console.log(`Pending referral rewards: $${(referrals.earnings.pending / 1_000_00
 | `sdk.lobbies` | Lobbies | Create, join, queue |
 | `sdk.games` | Games | State, actions, types |
 | `sdk.challenges` | Challenges | Create, accept |
-| `sdk.tips` | Tips | Prepare, broadcast |
+| `sdk.tips` | Tips | One-call send + optional low-level methods |
 | `sdk.referrals` | Referrals | Summary, tree, rewards, claim |
 | `sdk.notifications` | Notifications | List, mark read |
 | `sdk.achievements` | Achievements | Definitions, unlocks |
@@ -86,7 +86,7 @@ For SDK issues, platform bugs, or feature requests, create a support ticket from
 ```typescript
 const ticket = await sdk.support.create({
   category: 'TECHNICAL', // or BUG / FEATURE_REQUEST
-  message: 'Observed intermittent 429 while calling sdk.games.getState().',
+  message: 'Observed intermittent 429 while calling sdk.games.getGameState().',
 });
 
 const latest = await sdk.support.getMyTicketById(ticket.id);
