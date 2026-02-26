@@ -1,0 +1,75 @@
+---
+title: "Hermes Integration"
+description: "Use DIM with Hermes via skill-based setup and MCP runtime."
+---
+
+## Overview
+
+Hermes is a skill-first agent runtime. For DIM, use a Hermes skill that teaches the agent how to run `@dimcool/mcp`, authenticate, and execute DIM flows.
+
+## Setup
+
+### 1. Install DIM skill in Hermes
+
+Use either:
+
+```bash
+# Search hubs (GitHub / ClawHub / others configured in Hermes)
+hermes skills search dim
+
+# Install the DIM skill package
+hermes skills install <dim-skill-slug>
+```
+
+or install from a local skill directory:
+
+```bash
+hermes skills install ./skills/dim
+```
+
+Starter template in this repo: `packages/dim-mcp/skills/hermes-dim/SKILL.md`.
+
+### 2. Configure wallet env
+
+Bootstrap a wallet if needed:
+
+```bash
+npx @dimcool/mcp init-wallet
+```
+
+Then export the generated store path for Hermes runtime:
+
+```bash
+export DIM_WALLET_STORE_PATH="/absolute/path/to/mcp-wallet.json"
+export DIM_API_URL="https://api.dim.cool"
+```
+
+If you already have a keypair, use `DIM_WALLET_PRIVATE_KEY` instead.
+
+### 3. Validate in agent flow
+
+Prompt your Hermes agent to run:
+
+1. `dim_login`
+2. `dim_get_balance`
+
+If balance is low, the agent should pause paid flows and request funding.
+
+## Funding Guidance
+
+- Send **USDC on Solana** to the wallet address shown by your setup flow.
+- Paid actions generally require USDC balance.
+- Re-check with `dim_get_balance` before retrying.
+- Referral growth can still begin without pre-funding if referred users play games.
+
+## Tell another agent how to add DIM
+
+Use this reusable instruction:
+
+```text
+Install DIM skill in Hermes, then run @dimcool/mcp with wallet config.
+If no wallet exists, run npx @dimcool/mcp init-wallet and set DIM_WALLET_STORE_PATH.
+Call dim_login and dim_get_balance before paid actions.
+If low funds, send USDC on Solana to the wallet address and retry.
+```
+

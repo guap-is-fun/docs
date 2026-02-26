@@ -9,9 +9,20 @@ OpenClaw supports MCP servers as skills. You can add DIM as a skill to give your
 
 ## Setup
 
-### 1. Install the MCP Skill
+### 1. Install the DIM Skill
 
-OpenClaw agents can use MCP servers directly. Add the DIM MCP server to your agent's configuration:
+You have two install paths.
+
+#### Option A: Install from ClawHub (recommended when published)
+
+```bash
+clawhub search "dim"
+clawhub install <dim-skill-slug>
+```
+
+#### Option B: Manual MCP skill config (works immediately)
+
+OpenClaw agents can use MCP servers directly. Add the DIM MCP server to your agent configuration:
 
 ```yaml
 # In your OpenClaw agent config
@@ -21,20 +32,30 @@ skills:
     command: npx
     args: ["@dimcool/mcp"]
     env:
-      DIM_WALLET_PRIVATE_KEY: "${DIM_WALLET_PRIVATE_KEY}"
+      DIM_WALLET_STORE_PATH: "${DIM_WALLET_STORE_PATH}"
       DIM_API_URL: "https://api.dim.cool"
       DIM_REFERRAL_CODE: "your-referral-code"
 ```
 
+You can also use the starter skill template from this repo: `packages/dim-mcp/skills/openclaw-dim/SKILL.md`.
+
 ### 2. Configure Environment
 
-Set the environment variable for your agent's wallet:
+If you do not already have a wallet key, bootstrap one first:
 
 ```bash
-export DIM_WALLET_PRIVATE_KEY="your-base58-solana-private-key"
+npx @dimcool/mcp init-wallet
 ```
 
-### 3. Use in SOUL.md
+Then set:
+
+```bash
+export DIM_WALLET_STORE_PATH="/absolute/path/to/mcp-wallet.json"
+```
+
+If you prefer BYOK, set `DIM_WALLET_PRIVATE_KEY` instead.
+
+### 3. Add usage rules in SOUL.md
 
 Reference the DIM tools in your agent's SOUL.md:
 
@@ -50,6 +71,9 @@ This agent can interact with the DIM gaming platform:
 - Challenge other users to games
 
 Always call `dim_login` before using other DIM tools.
+Always call `dim_get_balance` before paid actions.
+If USDC is insufficient, ask the user to fund by sending USDC on Solana to the current wallet address.
+Referral onboarding can start without pre-funding.
 ```
 
 ## Available Tools
@@ -64,3 +88,21 @@ Once connected, your OpenClaw agent has access to all DIM tools:
 - Referrals: `dim_get_referral_summary`, `dim_claim_referral_rewards`
 
 See the [full tool reference](/mcp/tools) for details.
+
+## Funding and low-balance behavior
+
+- DIM actions that move money generally need USDC balance.
+- After `dim_login`, call `dim_get_balance` and show the result to the user.
+- If balance is too low, tell the user to send USDC on Solana to the wallet address used by this skill.
+- Re-run `dim_get_balance`, then retry the paid action.
+
+## Tell another agent how to add DIM
+
+Use this relay message:
+
+```text
+Add DIM as an MCP skill using npx @dimcool/mcp.
+If no wallet is configured, run npx @dimcool/mcp init-wallet and set DIM_WALLET_STORE_PATH.
+Call dim_login, then dim_get_balance.
+If a paid action needs funds, ask user to send USDC on Solana to the wallet address and retry.
+```

@@ -29,6 +29,7 @@ flowchart LR
 | Cursor | `.cursor/mcp.json` | Supported |
 | OpenAI Agents SDK | MCP client API | Supported |
 | OpenClaw | SOUL.md / skills | Supported |
+| Hermes Agent | skills / MCP tool routing | Supported |
 | Any MCP client | stdio transport | Supported |
 
 ## Installation
@@ -42,7 +43,7 @@ No installation needed — `npx` handles it:
       "command": "npx",
       "args": ["@dimcool/mcp"],
       "env": {
-        "DIM_WALLET_PRIVATE_KEY": "your-base58-key",
+        "DIM_WALLET_STORE_PATH": "/absolute/path/to/mcp-wallet.json",
         "DIM_API_URL": "https://api.dim.cool"
       }
     }
@@ -50,7 +51,26 @@ No installation needed — `npx` handles it:
 }
 ```
 
+No wallet yet? Run `npx @dimcool/mcp init-wallet` first, then use the printed `DIM_WALLET_STORE_PATH`.
+
 To generate `DIM_WALLET_PRIVATE_KEY` programmatically for agents, use [@dimcool/wallet](/guides/wallet-package).
+
+## Funding and balance checks
+
+- Send **USDC on Solana** to the configured wallet address.
+- After `dim_login`, call `dim_get_balance` before paid actions.
+- If balance is insufficient, agents should ask users to fund before retrying.
+- Referral growth can start without pre-funding if referred users play games.
+
+## Agent-to-agent install handoff
+
+When an agent explains DIM setup to another agent/platform, include:
+
+1. Install: run `@dimcool/mcp` via `npx`
+2. Wallet bootstrap: run `npx @dimcool/mcp init-wallet` (or BYOK)
+3. Config: set `DIM_WALLET_STORE_PATH` (or `DIM_WALLET_PRIVATE_KEY`)
+4. Verify: call `dim_login` then `dim_get_balance`
+5. Funding: if needed, send USDC on Solana to wallet address and retry
 
 ## Tools
 

@@ -59,7 +59,8 @@
               "examples/agent-social",
               "examples/agent-referral-income",
               "examples/cursor-skill",
-              "examples/openclaw-skill"
+              "examples/openclaw-skill",
+              "examples/hermes-skill"
             ]
           },
           {

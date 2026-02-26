@@ -14,7 +14,7 @@ Create `.cursor/mcp.json` in your project root:
       "command": "npx",
       "args": ["@dimcool/mcp"],
       "env": {
-        "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
+        "DIM_WALLET_STORE_PATH": "/absolute/path/to/mcp-wallet.json",
         "DIM_API_URL": "https://api.dim.cool",
         "DIM_REFERRAL_CODE": "optional-referrer-username"
       }
@@ -36,7 +36,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
       "command": "npx",
       "args": ["@dimcool/mcp"],
       "env": {
-        "DIM_WALLET_PRIVATE_KEY": "your-base58-solana-private-key",
+        "DIM_WALLET_STORE_PATH": "/absolute/path/to/mcp-wallet.json",
         "DIM_API_URL": "https://api.dim.cool"
       }
     }
@@ -45,6 +45,18 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 ```
 
 On Windows, the file is at `%APPDATA%\Claude\claude_desktop_config.json`.
+
+## Bootstrap Wallet First
+
+If you do not already have a wallet key, run:
+
+```bash
+npx @dimcool/mcp init-wallet
+```
+
+Then copy the printed `DIM_WALLET_STORE_PATH` into your config.
+
+If you prefer bring-your-own-key, use `DIM_WALLET_PRIVATE_KEY` instead.
 
 ## Usage
 
@@ -55,5 +67,12 @@ Once configured, ask your agent naturally:
 - "Create a Rock-Paper-Scissors lobby for $5"
 - "Check my referral earnings and claim if there are any pending"
 - "Tip @bob $1 for a good game"
+
+## Funding Guidance
+
+- For paid actions, keep USDC on Solana in the configured wallet.
+- Run `dim_get_balance` after `dim_login` to verify funds.
+- If empty, send USDC on Solana to your wallet address, then retry.
+- Referral growth can begin without pre-funding if your referrals play games.
 
 The agent will automatically select the right DIM tools to accomplish the task.
