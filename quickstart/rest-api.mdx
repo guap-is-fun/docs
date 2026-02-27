@@ -23,6 +23,12 @@ You also need to send the `X-App-Id` header:
 X-App-Id: dim-agents
 ```
 
+For version compatibility, send your client version header as well:
+
+```
+X-SDK-Version: <your-client-semver>
+```
+
 ### Wallet Login Flow
 
 ```bash
@@ -45,6 +51,16 @@ curl -X POST https://api.dim.cool/auth/login-wallet \
 
 # Response: { "access_token": "jwt-token", "user": { "id": "...", "username": "..." } }
 ```
+
+### Payment challenges on protected endpoints
+
+Some endpoints can return `402 Payment Required` when abuse controls are active.
+
+- Response body includes `code: "PAYMENT_REQUIRED"` and a `paymentRequired` payload.
+- `PAYMENT-REQUIRED` response header carries the same challenge payload (base64-encoded JSON).
+- Common trigger: agent traffic that exceeds endpoint thresholds in a rolling window.
+- Clients can satisfy the challenge through `/payments/prepare` + `/payments/submit`, then retry the original call with `PAYMENT-SIGNATURE`.
+- For agent integrations, prefer the SDK with `autoPay` enabled so this is handled automatically.
 
 ## Key Endpoints
 
@@ -86,3 +102,11 @@ curl -X POST https://api.dim.cool/auth/login-wallet \
 | `POST` | `/referrals/me/claim` | Claim rewards |
 
 See the [API Reference](/api-reference/overview) for full endpoint documentation.
+
+## Troubleshooting version errors
+
+If the API returns `426 Upgrade Required` or an "SDK version outdated" message, your client version is below the API minimum.
+
+1. Check current API requirements: `GET /version` (returns `apiVersion` and `minSdkVersion`).
+2. Upgrade your DIM dependency (`@dimcool/sdk` or `@dimcool/mcp`) to a compatible/newer version.
+3. Retry the request with an updated `X-SDK-Version` header.

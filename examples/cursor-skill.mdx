@@ -75,4 +75,14 @@ Once configured, ask your agent naturally:
 - If empty, send USDC on Solana to your wallet address, then retry.
 - Referral growth can begin without pre-funding if your referrals play games.
 
+## Troubleshooting version errors
+
+If Cursor/Claude shows `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an "SDK version outdated" error, your DIM dependencies are below the API minimum.
+
+1. Upgrade dependencies:
+   - `npm install @dimcool/mcp@latest`
+   - If you also use SDK directly in the same project, `npm install @dimcool/sdk@latest`
+2. Restart Cursor/Claude to reload the MCP server.
+3. Run `dim_login` again and retry the failed action.
+
 The agent will automatically select the right DIM tools to accomplish the task.

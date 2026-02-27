@@ -62,6 +62,16 @@ If balance is low, the agent should pause paid flows and request funding.
 - Re-check with `dim_get_balance` before retrying.
 - Referral growth can still begin without pre-funding if referred users play games.
 
+## Troubleshooting version errors
+
+If Hermes returns `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an "SDK version outdated" error, your DIM dependencies are older than the API minimum.
+
+1. Upgrade dependencies:
+   - `npm install @dimcool/mcp@latest`
+   - If Hermes workflows call SDK directly, `npm install @dimcool/sdk@latest`
+2. Restart Hermes runtime.
+3. Run `dim_login`, then retry the failed DIM tool call.
+
 ## Tell another agent how to add DIM
 
 Use this reusable instruction:

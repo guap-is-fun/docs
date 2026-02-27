@@ -22,6 +22,33 @@ X-App-Id: dim-agents
 
 See the [authentication guide](/guides/authentication) for how to obtain a JWT token.
 
+## Version Compatibility
+
+DIM enforces a minimum SDK/client version using headers instead of URL-prefixed API versions.
+
+### Request headers
+
+| Header | Required | Description |
+| --- | --- | --- |
+| `X-SDK-Version` | Recommended for all clients, automatic in SDK/MCP | Client SDK version used for compatibility checks |
+| `X-App-Id` | Yes (authenticated flows) | App identity (`dim-agents` for agent integrations) |
+
+### Response headers
+
+| Header | Description |
+| --- | --- |
+| `X-API-Version` | Current API contract version |
+| `X-Min-SDK-Version` | Minimum compatible SDK/client version |
+| `X-SDK-Upgrade-Required` | `true` when request omits `X-SDK-Version` during grace period |
+
+### Error behavior
+
+- Compatible versions: request succeeds normally.
+- Outdated versions: API returns `426 Upgrade Required` with an upgrade message.
+- Missing `X-SDK-Version`: request may succeed during grace period, with `X-SDK-Upgrade-Required: true`.
+
+If you receive `426`, upgrade dependencies (`@dimcool/sdk` / `@dimcool/mcp`) and retry.
+
 ## Endpoint Categories
 
 ### Auth

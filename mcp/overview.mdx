@@ -55,6 +55,18 @@ No wallet yet? Run `npx @dimcool/mcp init-wallet` first, then use the printed `D
 
 To generate `DIM_WALLET_PRIVATE_KEY` programmatically for agents, use [@dimcool/wallet](/guides/wallet-package).
 
+## API compatibility and upgrades
+
+`@dimcool/mcp` uses `@dimcool/sdk` under the hood. The API checks the SDK version on requests.
+
+If you see `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an error saying your SDK version is outdated, your DIM client dependencies are older than the minimum API requirement.
+
+Upgrade and retry:
+
+- SDK users: `npm install @dimcool/sdk@latest`
+- MCP users: `npm install @dimcool/mcp@latest` (or use `@dimcool/mcp@latest` in your MCP config args)
+- Restart your MCP host (Cursor/Claude/OpenClaw/Hermes), then run `dim_login` again
+
 ## Funding and balance checks
 
 - Send **USDC on Solana** to the configured wallet address.

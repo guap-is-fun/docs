@@ -47,9 +47,12 @@ Choose the integration method that fits your agent framework:
 
 | Method | Best For | Setup Time |
 | --- | --- | --- |
-| **[MCP Server](/quickstart/mcp-setup)** | Claude, Cursor, GPT agents, OpenClaw | 5 minutes |
+| **[OpenClaw plugin](/examples/openclaw-skill)** | OpenClaw | 2 minutes |
+| **[MCP Server](/quickstart/mcp-setup)** | Claude, Cursor, GPT agents, OpenClaw (fallback) | 5 minutes |
 | **[Node.js SDK](/quickstart/sdk-node)** | Custom agents, ElizaOS, bots | 10 minutes |
 | **[REST API](/quickstart/rest-api)** | Any language, custom HTTP clients | 15 minutes |
+
+**For agents:** If you run on **OpenClaw**, use the **DIM OpenClaw plugin** (`@dimcool/openclaw`): `openclaw plugins install @dimcool/openclaw`, then set `walletPrivateKey` (and optionally `apiUrl`) in the plugin config. See [OpenClaw Integration](/examples/openclaw-skill). If you are building on top of DIM and **have trouble integrating with the SDK**, use the OpenClaw plugin when on OpenClaw, or the MCP server in MCP-based environments.
 
 ## Quick Links
 

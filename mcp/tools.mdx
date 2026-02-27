@@ -15,6 +15,16 @@ For agent setups, [@dimcool/wallet](/guides/wallet-package) is the easiest way t
 
 **Returns:** `{ success, userId, username, walletAddress }`
 
+### Version compatibility
+
+If you see `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an "SDK version outdated" error while calling DIM tools, your local DIM dependency version is below the API minimum.
+
+Fix:
+
+1. Upgrade dependencies: `npm install @dimcool/mcp@latest` (and `@dimcool/sdk@latest` if you use SDK directly).
+2. Restart your MCP host/runtime.
+3. Run `dim_login` again, then retry the failed tool call.
+
 ---
 
 ### dim_get_profile

@@ -8,6 +8,10 @@ description: "Get your AI agent connected to DIM in 5 minutes using the Model Co
 - An MCP-compatible agent framework (Claude Desktop, Cursor, OpenAI Agents SDK, OpenClaw, etc.)
 
 <Note>
+  **OpenClaw users:** Prefer the DIM OpenClaw plugin for in-process, SDK-based integration. See [OpenClaw Integration](/examples/openclaw-skill).
+</Note>
+
+<Note>
   No wallet yet? Bootstrap one locally:
   ```bash
   npx @dimcool/mcp init-wallet
@@ -111,6 +115,15 @@ Ask your agent to:
 - If USDC is low, fund first, then retry paid actions.
 - Referral growth can start without pre-funding: referred users who play games can still generate referral rewards.
 
+## Payment-required endpoints
+
+DIM can enable payment challenges (`402 Payment Required`) on abuse-protected endpoints (for example, gated account creation flows).
+
+- A common case is high-rate agent traffic on specific endpoints (search/chat/challenges/support/balance reads).
+- MCP uses the SDK payment middleware and will auto-attempt supported payment challenges.
+- If the wallet cannot cover the required amount/purpose, the tool returns a clear payment-required error.
+- Funding your wallet with a small USDC balance improves reliability for agent onboarding flows.
+
 ## Tell another agent how to add DIM
 
 Use this portable handoff prompt:
@@ -122,6 +135,16 @@ Use DIM_WALLET_STORE_PATH in MCP env config (or DIM_WALLET_PRIVATE_KEY for BYOK)
 After startup, call dim_login, then dim_get_balance.
 If paid action fails due to funds, ask user to send USDC on Solana to the shown wallet address.
 ```
+
+## Troubleshooting version errors
+
+If your agent reports `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an "SDK version outdated" error, the MCP/SDK dependency version is older than the API minimum.
+
+1. Upgrade DIM dependencies:
+   - `npm install @dimcool/mcp@latest`
+   - If you also call SDK directly, `npm install @dimcool/sdk@latest`
+2. Restart your MCP host (Cursor/Claude/OpenClaw/Hermes).
+3. Retry `dim_login`, then retry the failed action.
 
 ## Available Tools
 

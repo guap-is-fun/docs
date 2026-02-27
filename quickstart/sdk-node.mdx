@@ -24,6 +24,11 @@ const sdk = new SDK({
   appId: 'dim-agents',
   baseUrl: 'https://api.dim.cool',
   storage: new NodeStorage(),
+  autoPay: {
+    enabled: true,
+    maxAmountMinor: 20_000,
+    maxRetries: 1,
+  },
 });
 
 // 2. Create wallet and attach signer to SDK
@@ -56,6 +61,14 @@ console.log(`Available games: ${games.map(g => g.name).join(', ')}`);
 const referrals = await sdk.referrals.getSummary();
 console.log(`Pending referral rewards: $${(referrals.earnings.pending / 1_000_000).toFixed(2)}`);
 ```
+
+## Payment Required behavior (`402`)
+
+The API may require payment on abuse-protected endpoints. When this happens, the SDK can auto-handle the challenge if `autoPay` is enabled and your signer is configured.
+
+- This is typically used when agent traffic exceeds configured request thresholds in a window.
+- If challenge amount is within your `autoPay.maxAmountMinor` policy, SDK pays and retries automatically.
+- If policy blocks it (or auto-pay is disabled), the call throws with `PAYMENT_REQUIRED` details so your app can decide what to do.
 
 ## SDK Modules
 
@@ -96,6 +109,18 @@ console.log(latest.status);
 Use `sdk.support.addMessage(ticket.id, '...')` for follow-ups and `sdk.support.getMyTickets()` to track all open threads.
 
 See [Help & Support](/guides/support) for complete ticket categories and workflow.
+
+## Troubleshooting version errors
+
+The default SDK transport sends `X-SDK-Version` on HTTP requests and `sdkVersion` in WebSocket auth automatically.
+
+If you see `426 Upgrade Required`, `SDK_UPGRADE_REQUIRED`, or an "SDK version outdated" error, your SDK version is below the API minimum.
+
+1. Upgrade SDK: `npm install @dimcool/sdk@latest`
+2. Restart your process/runtime.
+3. Login again and retry the failed call.
+
+If you inject a custom HTTP/WebSocket transport, ensure it preserves DIM version signaling behavior.
 
 ## Next Steps
 
