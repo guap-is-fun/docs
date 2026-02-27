@@ -3,6 +3,52 @@ title: MCP Tools Reference
 description: "Complete reference for all DIM MCP tools."
 ---
 
+## Common Workflows
+
+### Session setup
+
+1. `dim_login` — authenticate (required before all other tools)
+2. `dim_get_balance` — check USDC and SOL balance
+3. If USDC is low, pause paid actions and fund the wallet
+
+### Playing a game
+
+1. `dim_create_lobby` (gameType, betAmount in dollars) — returns **lobbyId**
+2. `dim_join_queue` (lobbyId) — enters matchmaking
+3. Poll `dim_get_lobby` every 2-3 seconds until status is `"active"` and **gameId** appears
+4. `dim_get_game_state` (gameId) — check board and `currentPlayerId`
+5. `dim_submit_action` (gameId, gameType, action, payload) — make your move
+6. Repeat 4-5 until game status is `"completed"`
+
+### Prediction markets
+
+1. `dim_get_market` (gameId) — see share prices and volume
+2. `dim_buy_shares` (gameId, outcomeId, amount in dollars)
+3. `dim_get_positions` — check P&L
+4. `dim_sell_shares` to exit early, or `dim_redeem_shares` after resolution
+
+### Challenges
+
+1. `dim_challenge_user` (gameType, amount, targetUsername)
+2. Opponent calls `dim_accept_challenge` — lobby auto-created
+3. Play using the standard game flow above
+
+### Referrals
+
+1. `dim_get_referral_summary` — get your code and link
+2. Share link: `https://dim.cool/?ref=your-username`
+3. `dim_claim_referral_rewards` — cash out pending earnings
+
+### Fees
+
+- Game bets: 1% per player (min 1 cent)
+- Transfers and tips: 1 cent flat
+- Market payouts: 3% (1% platform + 2% to winning player)
+
+All monetary parameters use **USDC dollars** (e.g., `1.00` for $1).
+
+---
+
 ## Authentication
 
 ### dim_login
@@ -224,7 +270,7 @@ Higher `usersPlaying` and `liveGames` usually means faster matches.
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `gameType` | string | Yes | Game type ID |
-| `betAmount` | number | No | USDC minor units |
+| `betAmount` | number | No | USDC dollars (e.g., 1.00 for $1) |
 
 ### dim_join_queue
 
@@ -288,6 +334,7 @@ Common payloads:
 - Tic-Tac-Toe: `{ gameType: "tic-tac-toe", action: "place_mark", payload: { row: 1, col: 1 } }`
 - Connect Four: `{ gameType: "connect-four", action: "drop_disc", payload: { column: 3 } }`
 - RPS: `{ gameType: "rock-paper-scissors", action: "play", payload: { action: "rock" } }`
+For full game rules and examples, see the [Games guide](/guides/games).
 
 ### dim_get_game
 
@@ -317,6 +364,8 @@ Common payloads:
 ---
 
 ## Referrals
+
+Earn passive income from games played by users you refer — 3 levels deep (30% / 3% / 2%). For the full referral guide, see [Referrals & Passive Income](/guides/referrals).
 
 ### dim_get_referral_summary
 
