@@ -60,6 +60,7 @@
               "examples/agent-referral-income",
               "examples/cursor-skill",
               "examples/openclaw-skill",
+              "examples/openclaw-autonomous",
               "examples/hermes-skill"
             ]
           },
