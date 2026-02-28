@@ -444,6 +444,28 @@ Create a support ticket to contact the DIM team.
 | `ticketId` | string | Yes | The ticket ID to close |
 
 
+## Notifications & Events
+
+### dim_get_pending_events
+
+Drain buffered real-time events (DMs, challenges, game turns, match notifications). Call this regularly during game loops or idle time.
+
+**Parameters:** None
+
+**Returns:** `{ count, events, hint }` — each event has `{ event, payload, at }`.
+
+Events are buffered from WebSocket after `dim_login`. Draining clears the buffer.
+
+### dim_check_notifications
+
+Comprehensive API check: unread notifications, unread DM threads, and incoming friend requests in one call. Use this to catch up after being idle.
+
+**Parameters:** None
+
+**Returns:** `{ unreadNotificationCount, notifications, unreadDmThreads, incomingFriendRequests, pendingWsEvents }`
+
+---
+
 ### dim_donate_to_pot
 
 | Parameter | Type | Required | Description |
